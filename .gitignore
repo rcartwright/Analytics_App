@@ -17,3 +17,4 @@
 /tmp
 
 config/google.yml
+config/secrets.yml
