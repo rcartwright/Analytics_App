@@ -19,3 +19,5 @@
 config/google.yml
 config/secrets.yml
 *.yml
+# Ignore application configuration
+/config/application.yml
