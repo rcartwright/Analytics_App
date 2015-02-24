@@ -1,8 +1,22 @@
 <!-- Step 1: Create the containing elements. -->
+<div class="row">
+	<div class ="col-md-6">
 
-<section id="auth-button"></section>
-<section id="view-selector"></section>
-<section id="timeline"></section>
+<section>
+<div id="auth-button"></div>
+<div id="view-selector"></div>
+<div id="timeline"></div>
+</section>
+
+</div>
+<div class ="col-md-6">
+<section>
+
+<div id="breakdown-chart-container"></div>
+
+</section>
+</div>
+</div>
 
 
 <script>
@@ -46,6 +60,23 @@ gapi.analytics.ready(function() {
     }
   });
 
+   var breakdownChart = new gapi.analytics.googleCharts.DataChart({
+query: {
+'dimensions': 'ga:date',
+'metrics': 'ga:sessions',
+'start-date': '7daysAgo',
+'end-date': 'yesterday'
+},
+chart: {
+type: 'LINE',
+container: 'breakdown-chart-container',
+options: {
+width: '100%'
+}
+}
+});
+
+
   // Step 6: Hook up the components to work together.
 
   gapi.analytics.auth.on('success', function(response) {
@@ -61,4 +92,9 @@ gapi.analytics.ready(function() {
     timeline.set(newIds).execute();
   });
 });
+</script>
+
+<script>
+
+
 </script>
