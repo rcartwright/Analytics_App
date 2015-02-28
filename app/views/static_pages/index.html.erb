@@ -1,18 +1,28 @@
 <!-- Step 1: Create the containing elements. -->
 <div class="row">
-	<div class ="col-md-6">
+<div class="col-md-12">
+  <div id="embed-api-auth-container"></div>
+<div id="view-selector-1-container"></div>
+</div>
+</div>
+
+
+<div class="row">
+
+	<div class="col-md-6">
 
 <section>
-<div id="auth-button"></div>
-<div id="view-selector"></div>
-<div id="timeline"></div>
+
+<div id="chart-1-container"></div>
+
+
 </section>
 
 </div>
 <div class ="col-md-6">
 <section>
 
-<div id="breakdown-chart-container"></div>
+<div id="chart-2-container"></div>
 
 </section>
 </div>
@@ -34,67 +44,76 @@ gapi.analytics.ready(function() {
   var CLIENT_ID = '<%= Figaro.env.CLIENT_ID -%>';
 
   gapi.analytics.auth.authorize({
-    container: 'auth-button',
+    container: 'embed-api-auth-container',
     clientid: CLIENT_ID,
   });
 
-  // Step 4: Create the view selector.
-
+  /**
+   * Create a ViewSelector for the first view to be rendered inside of an
+   * element with the id "view-selector-1-container".
+   */
   var viewSelector = new gapi.analytics.ViewSelector({
-    container: 'view-selector'
+    container: 'view-selector-1-container'
   });
 
-  // Step 5: Create the timeline chart.
 
-  var timeline = new gapi.analytics.googleCharts.DataChart({
-    reportType: 'ga',
+  // Render both view selectors to the page.
+  viewSelector.execute();
+
+
+
+  /**
+   * Create the first DataChart for top countries over the past 30 days.
+   * It will be rendered inside an element with the id "chart-1-container".
+   */
+  var dataChart1 = new gapi.analytics.googleCharts.DataChart({
     query: {
-      'dimensions': 'ga:date',
-      'metrics': 'ga:sessions',
+      metrics: 'ga:sessions',
+      dimensions: 'ga:country',
       'start-date': '30daysAgo',
       'end-date': 'yesterday',
+      'max-results': 6,
+      sort: '-ga:sessions'
     },
     chart: {
-      type: 'LINE',
-      container: 'timeline'
-    }
-  });
-
-   var breakdownChart = new gapi.analytics.googleCharts.DataChart({
-query: {
-'dimensions': 'ga:date',
-'metrics': 'ga:sessions',
-'start-date': '7daysAgo',
-'end-date': 'yesterday'
-},
-chart: {
-type: 'LINE',
-container: 'breakdown-chart-container',
-options: {
-width: '100%'
-}
-}
-});
-
-
-  // Step 6: Hook up the components to work together.
-
-  gapi.analytics.auth.on('success', function(response) {
-    viewSelector.execute();
-  });
-
-  viewSelector.on('change', function(ids) {
-    var newIds = {
-      query: {
-        ids: ids
+      container: 'chart-1-container',
+      type: 'PIE',
+      options: {
+        title: 'Charts over the past week.',
+        width: '100%'
       }
     }
-    timeline.set(newIds).execute();
   });
+
+
+  /**
+   * Create the second DataChart for top countries over the past 30 days.
+   * It will be rendered inside an element with the id "chart-2-container".
+   */
+  var dataChart2 = new gapi.analytics.googleCharts.DataChart({
+    query: {
+      metrics: 'ga:sessions',
+      dimensions: 'ga:date',
+      'start-date': '30daysAgo',
+      'end-date': 'yesterday'
+    },
+    chart: {
+      container: 'chart-2-container',
+      type: 'LINE',
+      options: {
+        title: 'Sessions over the past week.',
+        width: '100%'
+      }
+    }
+  });
+  /**
+   * Update the first dataChart when the first view selecter is changed.
+   */
+  viewSelector.on('change', function(ids) {
+    dataChart1.set({query: {ids: ids}}).execute();
+    dataChart2.set({query: {ids: ids}}).execute();
+  });
+
 });
 </script>
 
-<script>
-
-
-</script>
