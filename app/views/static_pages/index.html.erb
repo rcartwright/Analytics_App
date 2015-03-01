@@ -33,7 +33,7 @@
 
 <div class="row">
 
-    <div class="col-md-6">
+  <div class="col-md-6">
     <div class="panel">
       <div class="panel-body">
       <div id="chart-3-container"></div>
@@ -42,6 +42,11 @@
   </div>
 
   <div class="col-md-6">
+    <div class="panel">
+      <div class="panel-body">
+      <div id="chart-4-container"></div>
+    </div>
+    </div>
   </div>
 
 </div>
@@ -106,11 +111,28 @@ gapi.analytics.ready(function() {
   });
 
 
+  var dataChart2 = new gapi.analytics.googleCharts.DataChart({
+    query: {
+        metrics: 'ga:sessions',
+        dimensions: 'ga:country',
+      'start-date': '30daysAgo',
+      'end-date': 'yesterday',
+    },
+    chart: {
+      container: 'chart-2-container',
+      type: 'GEO',
+      options: {
+        title: 'Sessions over the last 30 days.',
+        width: '100%'
+      }
+    }
+  });
+
   /**
    * Create the second DataChart for top countries over the past 30 days.
    * It will be rendered inside an element with the id "chart-2-container".
    */
-  var dataChart2 = new gapi.analytics.googleCharts.DataChart({
+  var dataChart3 = new gapi.analytics.googleCharts.DataChart({
     query: {
       metrics: 'ga:sessions',
       dimensions: 'ga:date',
@@ -118,7 +140,7 @@ gapi.analytics.ready(function() {
       'end-date': 'yesterday'
     },
     chart: {
-      container: 'chart-2-container',
+      container: 'chart-3-container',
       type: 'LINE',
       options: {
         title: 'Sessions over the last 30 days.',
@@ -128,17 +150,17 @@ gapi.analytics.ready(function() {
   });
 
 
-    var dataChart3 = new gapi.analytics.googleCharts.DataChart({
+    var dataChart4 = new gapi.analytics.googleCharts.DataChart({
     query: {
       metrics: 'ga:pageviews',
       dimensions: 'ga:pagePath',
       'start-date': '30daysAgo',
       'end-date': 'yesterday',
-      'max-results': 6,
+      'max-results': 7,
       sort: '-ga:pageviews'
     },
     chart: {
-      container: 'chart-3-container',
+      container: 'chart-4-container',
       type: 'TABLE',
       options: {
         title: 'Sessions over the last 30 days.',
@@ -146,6 +168,9 @@ gapi.analytics.ready(function() {
       }
     }
   });
+
+
+
   /**
    * Update the first dataChart when the first view selecter is changed.
    */
@@ -153,6 +178,7 @@ gapi.analytics.ready(function() {
     dataChart1.set({query: {ids: ids}}).execute();
     dataChart2.set({query: {ids: ids}}).execute();
     dataChart3.set({query: {ids: ids}}).execute();
+    dataChart4.set({query: {ids: ids}}).execute();
   });
 
 });
