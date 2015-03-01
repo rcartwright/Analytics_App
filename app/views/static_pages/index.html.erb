@@ -31,6 +31,20 @@
 
 </div>
 
+<div class="row">
+
+    <div class="col-md-6">
+    <div class="panel">
+      <div class="panel-body">
+      <div id="chart-3-container"></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+  </div>
+
+</div>
 
 <script>
 
@@ -75,7 +89,7 @@ gapi.analytics.ready(function() {
   var dataChart1 = new gapi.analytics.googleCharts.DataChart({
     query: {
       metrics: 'ga:sessions',
-      dimensions: 'ga:country',
+      dimensions: 'ga:browser',
       'start-date': '30daysAgo',
       'end-date': 'yesterday',
       'max-results': 6,
@@ -85,7 +99,7 @@ gapi.analytics.ready(function() {
       container: 'chart-1-container',
       type: 'PIE',
       options: {
-        title: 'Pie chart over the last 30 days.',
+        title: 'Browsers over the last 30 days.',
         width: '100%'
       }
     }
@@ -112,12 +126,33 @@ gapi.analytics.ready(function() {
       }
     }
   });
+
+
+    var dataChart3 = new gapi.analytics.googleCharts.DataChart({
+    query: {
+      metrics: 'ga:pageviews',
+      dimensions: 'ga:pagePath',
+      'start-date': '30daysAgo',
+      'end-date': 'yesterday',
+      'max-results': 6,
+      sort: '-ga:pageviews'
+    },
+    chart: {
+      container: 'chart-3-container',
+      type: 'TABLE',
+      options: {
+        title: 'Sessions over the last 30 days.',
+        width: '100%'
+      }
+    }
+  });
   /**
    * Update the first dataChart when the first view selecter is changed.
    */
   viewSelector.on('change', function(ids) {
     dataChart1.set({query: {ids: ids}}).execute();
     dataChart2.set({query: {ids: ids}}).execute();
+    dataChart3.set({query: {ids: ids}}).execute();
   });
 
 });
