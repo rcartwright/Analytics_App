@@ -73,6 +73,14 @@ gapi.analytics.ready(function() {
   });
 
 
+
+gapi.analytics.auth.on('success', function(response) {
+   if($('.panel').css('display', 'none')){
+    $('.panel').css('display', 'inherit');
+ }
+});
+
+
   /**
    * Create a ViewSelector for the first view to be rendered inside of an
    * element with the id "view-selector-1-container".
